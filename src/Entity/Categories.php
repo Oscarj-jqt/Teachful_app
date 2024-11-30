@@ -39,4 +39,23 @@ class Categories
 
         return $this;
     }
+
+    // Relation 1 à n reliée à Produits :
+    // Chaque catégorie peut contenir plusieurs produits
+
+    // création d'une collection
+    private Collection $produits;
+
+    public function __construct()
+    {
+        $this->produits = new ArrayCollection();
+    }
+
+    // Les getters et setters de Categories
+
+    // Getter pour les produits liés à la catégorie
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
 }
