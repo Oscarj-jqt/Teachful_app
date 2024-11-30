@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Catégories;
+use App\Entity\Categories;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +16,7 @@ class CategoryController extends AbstractController
     public function getCategories(EntityManagerInterface $entityManager): Response
     {
         // teste récupération de toutes les catégories
-        $categories = $entityManager->getRepository(Catégories::class)->findAll();
+        $categories = $entityManager->getRepository(Categories::class)->findAll();
         $data = [];
 
         foreach ($categories as $category) {
@@ -34,7 +34,7 @@ class CategoryController extends AbstractController
     public function createCategory(Request $request, EntityManagerInterface $entityManager): Response
     {
         $data = json_decode($request->getContent(), true);
-        $category = new Catégories();
+        $category = new Categories();
         $category->setNom($data['nom']);
 
         $entityManager->persist($category);
@@ -46,7 +46,7 @@ class CategoryController extends AbstractController
     #[Route('/api/categories/{id}', name: 'get_category', methods: ['GET'])]
     public function getCategory(int $id, EntityManagerInterface $entityManager): Response
     {
-        $category = $entityManager->getRepository(Catégories::class)->find($id);
+        $category = $entityManager->getRepository(Categories::class)->find($id);
 
         if (!$category) {
             return new Response('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
@@ -61,7 +61,7 @@ class CategoryController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $category = $entityManager->getRepository(Catégories::class)->find($id);
+        $category = $entityManager->getRepository(Categories::class)->find($id);
 
         if (!$category) {
             return new Response('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
@@ -78,7 +78,7 @@ class CategoryController extends AbstractController
     #[Route('/api/categories/{id}', name: 'delete_category', methods: ['DELETE'])]
     public function deleteCategory(int $id, EntityManagerInterface $entityManager): Response
     {
-        $category = $entityManager->getRepository(Catégories::class)->find($id);
+        $category = $entityManager->getRepository(Categories::class)->find($id);
 
         if (!$category) {
             return new Response('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);

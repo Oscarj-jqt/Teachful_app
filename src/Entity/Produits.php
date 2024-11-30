@@ -23,7 +23,7 @@ class Produits
     private ?string $prix = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $catégorie = null;
+    private ?string $catgorie = null;
 
     #[ORM\Column(length: 255)]
     private ?string $date_de_création = null;
@@ -76,14 +76,14 @@ class Produits
         return $this;
     }
 
-    public function getCatégorie(): ?string
+    public function getcategorie(): ?string
     {
-        return $this->catégorie;
+        return $this->categorie;
     }
 
-    public function setCatégorie(string $catégorie): static
+    public function setcategorie(string $categorie): static
     {
-        $this->catégorie = $catégorie;
+        $this->categorie = $categorie;
 
         return $this;
     }

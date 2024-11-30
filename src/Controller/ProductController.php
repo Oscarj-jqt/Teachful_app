@@ -2,7 +2,7 @@
 
 # Controleur gérant les routes CRUD de Produits
 namespace App\Controller;
-use App\Entity\Produit;
+use App\Entity\Produits;
 // interraction avec la base de donnée
 use Doctrine\ORM\EntityManagerInterface; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,11 +15,21 @@ class ProductController extends AbstractController
     #[Route(path:'api/produits', name:'get_produits', methods:['GET'])]
     public function getProduits(EntityManagerInterface $entityManager): Response
     {
-        // Récupération des produits de la base 
+        // Teste de récupération des produits
         $produits = $entityManager->getRepository(Produits::class)->findAll();
-
+        $data = [];
+        foreach ($produits as $produit) {
+            $data[] = [
+                'id' => $produit->getId(),
+                'nom' => $produit->getNom(),
+                'description' => $produit->getDescription(),
+                'prix' => $produit->getPrix(),
+                'categorie' => $produit->getCategorie(),
+                'date_de_creation' => $produit->getDateDeCréation(),
+            ];
+        }
         // Conversion en json
-        return $this->json($produits);
+        return $this->json($data);
     }
 
     // Création d'un produit (post) 
@@ -35,7 +45,7 @@ class ProductController extends AbstractController
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCatégorie($data['catégorie']);
+        $produit->setCategorie($data['catégorie']);
         $produit->setDateDeCréation(date('Y-m-d H:i:s'));
 
         // Sauvegarde dans la bdd
@@ -79,7 +89,7 @@ class ProductController extends AbstractController
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCatégorie($data['catégorie']);
+        $produit->setCategorie($data['catégorie']);
 
         // Sauvegarde de la màj dans la bdd
         $entityManager->flush();

@@ -1,2 +1,11 @@
 après création de l'app
 crétaion des entités (produits et catégories)
+
+Lors de la création de l'API Restful --> gestion de contrôleur
+qui va gérer les requêtes HTTP
+On crée alors un contrôleur pour chaque entité : 
+php bin/console make:controller ProductController
+
+On a créé la base de donnée
+
+On va procédons au 1er test pour produits avec Postman
