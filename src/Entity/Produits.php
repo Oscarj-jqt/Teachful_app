@@ -15,16 +15,38 @@ class Produits
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le nom ne peut pas être au-dessus de 255 caractères."
+    )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "La description ne peut pas être au-dessus de caractères."
+    )]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prix est obligatoire.")]
+    #[Assert\Regex(
+        pattern: "/^\d+(\.\d{1,2})?$/",
+        message: "Le prix doit être un nombre avec 2 chiffres maximales après la virgule."
+    )]
     private ?string $prix = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
     private ?string $date_de_création = null;
+
+
+    #[ORM\Column(type: "datetime")]
+    #[Assert\NotBlank(message: "La date est obligatoire.")]
+    #[Assert\Type("\DateTimeInterface", message: "Renseignez une date valide.")]
+    private ?\DateTimeInterface $dateDeCreation = null;
+
 
     public function getId(): ?int
     {
