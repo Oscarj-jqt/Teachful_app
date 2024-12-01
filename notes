@@ -51,14 +51,21 @@ if ($categorie) {
 -Passer à la validation des données avec : 
 composer require symfony/validator
 
+Script de validation de donnée avec les controleurs en cours...
+- utilisation de ValidatorInterface symfony
+- gestion des erreurs
+
 
 Puis on va insérer les données:
 -utilisation de Faker pour remplir les entités avec des données fictives
 
-On procède aux tests controleur de validation de données
+On procède aux tests controleur de validation de données avec Postman
 
+Test POST réussie : API fonctionne bien et a renvoyé les données.
 
-
+changer le type de prix :
+#[ORM\Column(type: 'float')]
+private ?float $prix = null;
 
  Parie front REACT + TAILWIND
 Réutilisation du projet react (MDtic) avec les même procédés fetch url API, useState, création de components...

@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Categories;
+use App\Entity\Produits;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 // Même façon qu'avec productcontroller
 class CategoryController extends AbstractController

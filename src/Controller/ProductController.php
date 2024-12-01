@@ -3,6 +3,7 @@
 # Controleur gérant les routes CRUD de Produits
 namespace App\Controller;
 
+use App\Entity\Categories;
 use App\Entity\Produits;
 // interraction avec la base de donnée
 use Doctrine\ORM\EntityManagerInterface; 
@@ -10,11 +11,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-// validation des données
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+// validation des données du contrôleur
+// use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
+
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     // Route pour récupérer les produits (get)
     #[Route(path:'api/produits', name:'get_produits', methods:['GET'])]
     public function getProduits(EntityManagerInterface $entityManager): Response
@@ -29,7 +39,7 @@ class ProductController extends AbstractController
                 'description' => $produit->getDescription(),
                 'prix' => $produit->getPrix(),
                 'categorie' => $produit->getCategorie(),
-                'date_de_creation' => $produit->getDateDeCréation(),
+                'date_de_creation' => $produit->getDateDeCreation(),
             ];
         }
         // Conversion en json
@@ -38,40 +48,52 @@ class ProductController extends AbstractController
 
     // Création d'un produit (post) 
     #[Route('/api/produits', name: 'create_produit', methods: ['POST'])]
-    public function createProduit(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
+    public function createProduit(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Récupérer les données envoyées dans le body de la requête
+        // On récupère les informations du body
         $data = json_decode($request->getContent(), true);
 
-        // Création de l'objet
+        // Système de validation des données du contrôleur
+        if (!$data['nom'] || !$data['prix'] || !$data['categorie']) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Les champs nom, prix et categorie sont obligatoires'], 400);
+        }
+
+        // On récupère l'objet catégorie à partir de l'ID
+        $categorie = $this->entityManager->getRepository(Categories::class)->find($data['categorie_id']);
+
+
+        if (!$categorie) {
+            return new JsonResponse(['error' => 'Catégorie introuvable.'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+
+        // Création d'un nouveau produit
         $produit = new Produits();
         // Gestion des attributs
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCategorie($data['catégorie']);
-        $produit->setDateDeCréation(date('Y-m-d H:i:s'));
+        $produit->setCategorieRelation($data['categorie']);
+        $produit->setDateDeCreation(new \DateTime($data['date_de_creation']));
 
-        // Validation des données
-        $errors = $validator->validate($produit);
 
-        // Si des erreurs de validation sont présentes, on les renvoie
-        if (count($errors) > 0) {
-            // Les erreurs 
-            return $this->json([
-                'status' => 'error',
-                'errors' => (string) $errors
-            ], 400);
-        }
+        // On associe la catégorie au produit
+        $produit->setCategorieRelation($categorie);
 
-        // Si validation des données ca continue
-        // Sauvegarde dans la bdd
-        $entityManager->persist($produit);
-        $entityManager->flush();
+        // sauvegarde dans la bdd
+        $this->entityManager->persist($produit);
+        $this->entityManager->flush();
 
-        // Retourne une réponse JSON avec le produit créé
-        return $this->json($produit, 201);
-
+        // Donnée json du produit créé
+        return new JsonResponse([
+            'message' => 'Produit créé avec succès',
+            'id' => $produit->getId(),
+            'nom' => $produit->getNom(),
+            'description' => $produit->getDescription(),
+            'prix' => $produit->getPrix(),
+            'categorie' => $produit->getCategorie(),
+            'date_de_creation' => $produit->getDateDeCreation(),
+        ], Response::HTTP_CREATED);
     }
 
     // Récupérer un produit
@@ -107,7 +129,7 @@ class ProductController extends AbstractController
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCategorie($data['catégorie']);
+        $produit->setCategorieRelation($data['categorie']);
 
         // Sauvegarde de la màj dans la bdd
         $entityManager->flush();
