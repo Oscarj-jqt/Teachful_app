@@ -45,11 +45,11 @@ foreach ($categories as $categorieNom) {
         // on insère
         $stmt = $pdo->prepare("INSERT INTO categories (nom) VALUES (:nom)");
         $stmt->execute([':nom' => $categorieNom]);
-        echo "Catégorie '$categorieNom' insérée.\n";
+        error_log("Catégorie '$categorieNom' insérée.");
     } else {
-        echo "La catégorie '$categorieNom' existe déjà.\n";
+        error_log("Catégorie '$categorieNom' insérée.");
     }
-    echo "Catégorie '$categorieNom' insérée.\n";
+    error_log("Catégorie '$categorieNom' insérée.");
 }
 
 
