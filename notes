@@ -15,7 +15,7 @@ Les CRUD sont fonctionnels
 
 On commence la gestion des relations (1 à n, n à n, n à 1) : 
 
-
+Pour plus tard lors de l'affiche de l'interface
 accéder à tous les produits d'une catégorie :
 
 $categorie = $categoriesRepository->find(1);
