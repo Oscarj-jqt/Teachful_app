@@ -9,3 +9,12 @@ php bin/console make:controller ProductController
 On a créé la base de donnée
 
 On va procédons au 1er test pour produits avec Postman
+
+Les CRUD sont fontionnels
+
+On commence la gestion des relations (1 à n, n à n, n à 1) : 
+Ici on a :
+- 1 à n côté Categories : une catégorie peut contenir plusieurs produits
+et chaque produit appartient à une catégorie
+- n à n
+

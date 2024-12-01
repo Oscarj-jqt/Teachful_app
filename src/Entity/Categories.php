@@ -44,6 +44,7 @@ class Categories
     // Chaque catégorie peut contenir plusieurs produits
 
     // création d'une collection
+    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Produits::class)]
     private Collection $produits;
 
     public function __construct()

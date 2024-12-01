@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProduitsRepository;
+// Gestion des relations
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
@@ -21,9 +22,6 @@ class Produits
 
     #[ORM\Column(length: 255)]
     private ?string $prix = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $catgorie = null;
 
     #[ORM\Column(length: 255)]
     private ?string $date_de_création = null;
@@ -76,27 +74,31 @@ class Produits
         return $this;
     }
 
-    public function getcategorie(): ?string
-    {
-        return $this->categorie;
-    }
-
-    public function setcategorie(string $categorie): static
-    {
-        $this->categorie = $categorie;
-
-        return $this;
-    }
-
-    public function getDateDeCréation(): ?string
+    public function getDateDeCreation(): ?string
     {
         return $this->date_de_création;
     }
 
-    public function setDateDeCréation(string $date_de_création): static
+    public function setDateDeCreation(string $date_de_création): static
     {
         $this->date_de_création = $date_de_création;
+        return $this;
+    }
+    // Relations n à 1 reliée à Categorie : 
+    // Chaque produit appartient à une seule catégorie
+    #[ORM\ManyToOne(targetEntity: Categories::class, inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categories $categorieRelation = null;
 
+    // Getter et Setter pour la relation ManyToOne
+    public function getCategorieRelation(): ?Categories
+    {
+        return $this->categorieRelation;
+    }
+
+    public function setCategorieRelation(?Categories $categorie): self
+    {
+        $this->categorieRelation = $categorie;
         return $this;
     }
 }
