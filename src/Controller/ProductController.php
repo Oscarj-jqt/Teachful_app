@@ -2,12 +2,16 @@
 
 # Controleur gérant les routes CRUD de Produits
 namespace App\Controller;
+
 use App\Entity\Produits;
 // interraction avec la base de donnée
 use Doctrine\ORM\EntityManagerInterface; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+// validation des données
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -34,7 +38,7 @@ class ProductController extends AbstractController
 
     // Création d'un produit (post) 
     #[Route('/api/produits', name: 'create_produit', methods: ['POST'])]
-    public function createProduit(Request $request, EntityManagerInterface $entityManager): Response
+    public function createProduit(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
     {
         // Récupérer les données envoyées dans le body de la requête
         $data = json_decode($request->getContent(), true);
@@ -48,11 +52,25 @@ class ProductController extends AbstractController
         $produit->setCategorie($data['catégorie']);
         $produit->setDateDeCréation(date('Y-m-d H:i:s'));
 
+        // Validation des données
+        $errors = $validator->validate($produit);
+
+        // Si des erreurs de validation sont présentes, on les renvoie
+        if (count($errors) > 0) {
+            // Les erreurs 
+            return $this->json([
+                'status' => 'error',
+                'errors' => (string) $errors
+            ], 400);
+        }
+
+        // Si validation des données ca continue
         // Sauvegarde dans la bdd
         $entityManager->persist($produit);
         $entityManager->flush();
 
-        return $this->json($produit, Response::HTTP_CREATED);
+        // Retourne une réponse JSON avec le produit créé
+        return $this->json($produit, 201);
 
     }
 

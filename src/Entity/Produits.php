@@ -37,10 +37,6 @@ class Produits
     )]
     private ?string $prix = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "La catégorie est obligatoire.")]
-    private ?string $date_de_création = null;
-
 
     #[ORM\Column(type: "datetime")]
     #[Assert\NotBlank(message: "La date est obligatoire.")]
@@ -98,12 +94,12 @@ class Produits
 
     public function getDateDeCreation(): ?string
     {
-        return $this->date_de_création;
+        return $this->date_de_creation;
     }
 
-    public function setDateDeCreation(string $date_de_création): static
+    public function setDateDeCreation(string $date_de_creation): static
     {
-        $this->date_de_création = $date_de_création;
+        $this->date_de_creation = $date_de_creation;
         return $this;
     }
     // Relations n à 1 reliée à Categorie : 
