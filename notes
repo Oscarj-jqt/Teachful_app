@@ -61,3 +61,10 @@ On procède aux tests controleur de validation de données
 
 
  Parie front REACT + TAILWIND
+Réutilisation du projet react (editeur markdown) avec les même procédés fetch url API, useState, création de components...
+
+Faire le design system du site Teach'r sas : 
+-récupérer les main colors (2-3 max)
+-récupérer la font style et family
+
+Documentation sur Tailwind pour élaborer le calatalogue
