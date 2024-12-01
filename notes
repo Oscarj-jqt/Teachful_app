@@ -68,6 +68,10 @@ private ?float $prix = null;
 Puis on va insérer les données:
 -utilisation de Faker pour remplir les entités avec des données fictives
 
+D'abord s'assurer la connexion à la base de donnée
+Puis l'insertion
+Enfin les tests en temps réel
+
 On va prendre 5 catégories : 
 -Electronique, Livre, Maison, Vetement et Sport
 Et 50 produits
