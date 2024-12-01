@@ -62,6 +62,8 @@ Puis on va insérer les données:
 On procède aux tests controleur de validation de données avec Postman
 
 Test POST réussie : API fonctionne bien et a renvoyé les données.
+La validation avec le controleur produits fonctionne bien
+On procède à la mm pour Categories
 
 changer le type de prix :
 #[ORM\Column(type: 'float')]

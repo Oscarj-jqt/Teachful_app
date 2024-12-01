@@ -14,6 +14,16 @@ class Categories
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    // Vérifie si le champ est vide
+    #[Assert\NotBlank(message: "Le nom de la catégorie est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le nom de la catégorie ne peut pas être au-dessus de 255 caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9\s\-]+$/",
+        message: "Le nom de la catégorie contient des caractères invalides."
+    )]
     private ?string $nom = null;
 
     

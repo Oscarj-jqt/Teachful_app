@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 // validation des données du contrôleur
 // use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ProductController extends AbstractController
+class ProduitController extends AbstractController
 {
 
     private $entityManager;
