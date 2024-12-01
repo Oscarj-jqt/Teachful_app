@@ -6,6 +6,7 @@ use App\Entity\Categories;
 use App\Entity\Produits;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,7 @@ class CategorieController extends AbstractController
     {
         // teste récupération de toutes les catégories
         $categories = $entityManager->getRepository(Categories::class)->findAll();
+        // stockage dans un tableau de valeurs
         $data = [];
 
         foreach ($categories as $categorie) {
@@ -39,17 +41,18 @@ class CategorieController extends AbstractController
 
         // Validation des données
         if (empty($data['nom'])) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Le champ "nom" est obligatoire'], 400);
+            return new JsonResponse(['status' => 'error', 'message' => 'Le nom de la catégorie est obligatoire'], 400);
         }
 
-        
+        // Création d'une catégorie
         $categorie = new Categories();
         $categorie->setNom($data['nom']);
 
+        // Sauvegarde
         $entityManager->persist($categorie);
         $entityManager->flush();
 
-        return $this->json($categorie, Response::HTTP_CREATED);
+        return new JsonResponse(['message' => 'La nouvelle catégorie a été créée'], Response::HTTP_CREATED);
     }
 
     #[Route('/api/categories/{id}', name: 'get_categorie', methods: ['GET'])]
@@ -58,7 +61,7 @@ class CategorieController extends AbstractController
         $categorie = $entityManager->getRepository(Categories::class)->find($id);
 
         if (!$categorie) {
-            return new Response('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
+            return new JsonResponse('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
         }
 
         return $this->json($categorie);
@@ -68,19 +71,26 @@ class CategorieController extends AbstractController
     #[Route('/api/categories/{id}', name: 'update_categorie', methods: ['PUT'])]
     public function updateCategorie(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $data = json_decode($request->getContent(), true);
-
         $categorie = $entityManager->getRepository(Categories::class)->find($id);
 
         if (!$categorie) {
             return new Response('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
         }
 
+        // On récupère les données envoyés
+        $data = json_decode($request->getContent(), true);
+
+        // Validation des données
+        if (empty($data['nom'])) {
+            return new JsonResponse(['message' => 'Le nom de la catégorie est obligatoire'], 400);
+        }
+
+        // Mise à jour de la catégorie
         $categorie->setNom($data['nom']);
 
         $entityManager->flush();
 
-        return $this->json($categorie);
+        return new JsonResponse(['message' => 'Catégorie mise à jour avec succès']);
     }
 
     // Supprimer une catégorie
@@ -90,12 +100,13 @@ class CategorieController extends AbstractController
         $categorie = $entityManager->getRepository(Categories::class)->find($id);
 
         if (!$categorie) {
-            return new Response('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
+            return new JsonResponse('Erreur ! Catégorie non trouvée', Response::HTTP_NOT_FOUND);
         }
 
+        // Suppression dans la bdd
         $entityManager->remove($categorie);
         $entityManager->flush();
 
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        return new JsonResponse(['message' => 'La catégorie a bien été supprimée']);
     }
 }

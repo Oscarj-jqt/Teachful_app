@@ -13,9 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-// validation des données du contrôleur
-// use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 class ProduitController extends AbstractController
 {
 
@@ -31,6 +28,12 @@ class ProduitController extends AbstractController
     {
         // Teste de récupération des produits
         $produits = $entityManager->getRepository(Produits::class)->findAll();
+
+        // Vérification de la récupération
+        if (!$produits) {
+            return new JsonResponse(['message' => 'Erreur ! Les produits ne sont trouvés'], Response::HTTP_NOT_FOUND);
+        }
+
         $data = [];
         foreach ($produits as $produit) {
             $data[] = [
@@ -50,20 +53,18 @@ class ProduitController extends AbstractController
     #[Route('/api/produits', name: 'create_produit', methods: ['POST'])]
     public function createProduit(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        // On récupère les informations du body
+        // On récupère les informations du body avec json_decode
         $data = json_decode($request->getContent(), true);
 
-        // Système de validation des données du contrôleur
+        // Système de validation pour l'ajout de produit avec le controleur
         if (!$data['nom'] || !$data['prix'] || !$data['categorie']) {
             return new JsonResponse(['status' => 'error', 'message' => 'Les champs nom, prix et categorie sont obligatoires'], 400);
         }
 
         // On récupère l'objet catégorie à partir de l'ID
         $categorie = $this->entityManager->getRepository(Categories::class)->find($data['categorie_id']);
-
-
         if (!$categorie) {
-            return new JsonResponse(['error' => 'Catégorie introuvable.'], JsonResponse::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'La catégorie est introuvable.'], JsonResponse::HTTP_NOT_FOUND);
         }
 
 
@@ -73,12 +74,9 @@ class ProduitController extends AbstractController
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCategorieRelation($data['categorie']);
+        $produit->setCategorieRelation($categorie);
         $produit->setDateDeCreation(new \DateTime($data['date_de_creation']));
 
-
-        // On associe la catégorie au produit
-        $produit->setCategorieRelation($categorie);
 
         // sauvegarde dans la bdd
         $this->entityManager->persist($produit);
@@ -103,7 +101,7 @@ class ProduitController extends AbstractController
         // Même chose mais avec l'id
         $produit = $entityManager->getRepository(Produits::class)->find($id);
 
-        // gestion d'erreur
+        // gestion de validation
         if (!$produit) {
             return new Response('Erreur ! Produit non trouvé', Response::HTTP_NOT_FOUND);
         }
@@ -116,25 +114,44 @@ class ProduitController extends AbstractController
     #[Route('/api/produits/{id}', name: 'update_produit', methods: ['PUT'])]
     public function updateProduit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $produit = $entityManager->getRepository(Produits::class)->find($id);
+        //Sélection et vérification du produit
+        if (!$produit) {
+            return new JsonResponse('Erreur ! Produit non trouvé', Response::HTTP_NOT_FOUND);
+        }
+        
+
+
         $data = json_decode($request->getContent(), true);
 
-        //Sélection du produit
-        $produit = $entityManager->getRepository(Produits::class)->find($id);
-
-        if (!$produit) {
-            return new Response('Erreur ! Produit non trouvé', Response::HTTP_NOT_FOUND);
+        // Validation pour la modification de produit
+        if (empty($data['nom']) || empty($data['prix'])) {
+            return new JsonResponse(['message' => 'Le nom et le prix sont obligatoires'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Rappel de la méthode post
+
+        if ($data['prix'] < 0) {
+            return new JsonResponse(['message' => 'Le prix ne peut pas être en-dessous de 0'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // On vérifie aussi si la catégorie existe
+        $categorie = $entityManager->getRepository(Categories::class)->find($data['categorie']);
+
+        if (!$categorie) {
+            return new JsonResponse(['message' => 'La catégorie n\'existe pas'], Response::HTTP_BAD_REQUEST);
+        }
+        
+
+        // Application des modifications au produit
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
         $produit->setCategorieRelation($data['categorie']);
 
         // Sauvegarde de la màj dans la bdd
-        $entityManager->flush();
+        $this->getDoctrine()->getManager()->flush();
 
-        return $this->json($produit);
+        return new JsonResponse(['message' => 'Produit mis à jour avec succès']);
     }
 
     // Suppression d'un produit (delete)
@@ -142,7 +159,7 @@ class ProduitController extends AbstractController
     public function deleteProduit(int $id, EntityManagerInterface $entityManager): Response
     {
         $produit = $entityManager->getRepository(Produits::class)->find($id);
-        
+        // On vérifie si ce produit existe bien
         if (!$produit) {
             return new Response('Erreur ! Produit non trouvé', Response::HTTP_NOT_FOUND);
         }
@@ -151,7 +168,7 @@ class ProduitController extends AbstractController
         $entityManager->remove($produit);
         $entityManager->flush();
 
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        return new JsonResponse(['message' => 'Produit supprimé avec succès']);
     }
 
 }
