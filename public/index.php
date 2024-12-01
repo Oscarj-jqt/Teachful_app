@@ -52,32 +52,5 @@ foreach ($categories as $categorieNom) {
     echo "Catégorie '$categorieNom' insérée.\n";
 }
 
-// Insertion des produits
-$produitsCount = 50;
-
-// for ($i = 0; $i < $produitsCount; $i++) {
-//     // Générer des données pour le produit
-//     $nom = uniqid('Produit_', true);
-//     $prix = rand(10, 1000);
-//     $description = 'Description du produit ' . $nom;
-    
-//     // Sélectionner une catégorie au hasard
-//     $categorie_id = rand(1, count($categories));  // Assure-toi que l'ID est valide dans la table
-
-//     // Requête d'insertion pour les produits
-//     $query = "INSERT INTO produits (nom, prix, description, date_de_creation, categorie_id) VALUES (:nom, :prix, :description, NOW(), :categorie_id)";
-//     $stmt = $pdo->prepare($query);
-
-//     $stmt->execute([
-//         ':nom' => $nom,
-//         ':prix' => $prix,
-//         ':description' => $description,
-//         ':categorie_id' => $categorie_id
-//     ]);
-    
-//     echo "Produit '$nom' inséré.\n";
-
-// }
-
 
 ?>
