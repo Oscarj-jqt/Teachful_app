@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\CategoriesRepository;
+// Gestion des relations
 use Doctrine\ORM\Mapping as ORM;
+//Gestion des collections pour la bdd
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
@@ -56,17 +59,15 @@ class Categories
 
     // création d'une collection
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Produits::class)]
-    private Collection $produits;
+    private ArrayCollection $produits;
 
     public function __construct()
     {
         $this->produits = new ArrayCollection();
     }
 
-    // Les getters et setters de Categories
-
-    // Getter pour les produits liés à la catégorie
-    public function getProduits(): Collection
+    // Les getters et setters pour produits
+    public function getProduits(): ArrayCollection
     {
         return $this->produits;
     }

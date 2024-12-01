@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ProduitsRepository;
 // Gestion des relations
 use Doctrine\ORM\Mapping as ORM;
+//Gestion des collections pour la bdd
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
 class Produits
