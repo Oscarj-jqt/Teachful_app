@@ -10,11 +10,47 @@ On a créé la base de donnée
 
 On va procédons au 1er test pour produits avec Postman
 
-Les CRUD sont fontionnels
+Les CRUD sont fonctionnels
 
 On commence la gestion des relations (1 à n, n à n, n à 1) : 
-Ici on a :
-- 1 à n côté Categories : une catégorie peut contenir plusieurs produits
-et chaque produit appartient à une catégorie
-- n à n
+
+
+accéder à tous les produits d'une catégorie :
+
+$categorie = $categoriesRepository->find(1);
+foreach ($categorie->getProduits() as $produit) {
+    echo $produit->getNom();
+}
+
+obtenir la catégorie d’un produit :
+
+$produit = $produitsRepository->find(1);
+echo $produit->getCategorieRelation()->getNom();
+
+// Dans ton contrôleur ou un script PHP :
+
+// Récupérer le repository des catégories
+$categoriesRepository = $entityManager->getRepository(Categories::class);
+
+// Récupérer la catégorie avec l'ID 1
+$categorie = $categoriesRepository->find(1);
+
+// Vérifier que la catégorie existe
+if ($categorie) {
+    // Parcourir tous les produits de cette catégorie
+    foreach ($categorie->getProduits() as $produit) {
+        echo 'Nom du produit : ' . $produit->getNom() . PHP_EOL;
+    }
+} else {
+    echo "Catégorie introuvable.";
+}
+
+
+
+-Passer à la validation des données avec : 
+composer require symfony/validator
+
+
+Puis on va insérer les données:
+-utilisation de Faker pour remplir les entités avec des données fictives
 

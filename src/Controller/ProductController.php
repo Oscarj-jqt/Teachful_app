@@ -113,4 +113,5 @@ class ProductController extends AbstractController
 
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
+
 }
