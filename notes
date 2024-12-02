@@ -75,7 +75,10 @@ Enfin les tests en temps réel
 On va prendre 5 catégories : 
 -Electronique, Livre, Maison, Vetement et Sport
 Et 50 produits
+exemple:
 Une description courte, le prix compris entre 10 euros et 500 euros
+
+Problèmes avec le traitement des requêtes de l'API
 
 Parie front REACT + TAILWIND
 Réutilisation du projet react (MDtic) avec les même procédés fetch url API, useState, création de components...
