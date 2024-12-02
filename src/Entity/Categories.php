@@ -7,6 +7,9 @@ use App\Repository\CategoriesRepository;
 use Doctrine\ORM\Mapping as ORM;
 //Gestion des collections pour la bdd
 use Doctrine\Common\Collections\ArrayCollection;
+// Contraintes
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
@@ -35,12 +38,12 @@ class Categories
         return $this->id;
     }
 
-    public function setId(int $id): static
-    {
-        $this->id = $id;
+    // public function setId(int $id): static
+    // {
+    //     $this->id = $id;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getNom(): ?string
     {

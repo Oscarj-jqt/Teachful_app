@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ProduitController extends AbstractController
 {
 
+
     private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -24,29 +25,13 @@ class ProduitController extends AbstractController
     }
     // Route pour récupérer les produits (get)
     #[Route(path:'api/produits', name:'get_produits', methods:['GET'])]
-    public function getProduits(EntityManagerInterface $entityManager): Response
+    public function getProduits(ProduitsRepository $produitsRepository)
     {
-        // Teste de récupération des produits
-        $produits = $entityManager->getRepository(Produits::class)->findAll();
-
-        // Vérification de la récupération
-        if (!$produits) {
-            return new JsonResponse(['message' => 'Erreur ! Les produits ne sont trouvés'], Response::HTTP_NOT_FOUND);
+        {
+            $produits = $produitsRepository->findAll();
+            return $this->json($produits);
         }
-
-        $data = [];
-        foreach ($produits as $produit) {
-            $data[] = [
-                'id' => $produit->getId(),
-                'nom' => $produit->getNom(),
-                'description' => $produit->getDescription(),
-                'prix' => $produit->getPrix(),
-                'categorie' => $produit->getCategorie(),
-                'date_de_creation' => $produit->getDateDeCreation(),
-            ];
-        }
-        // Conversion en json
-        return $this->json($data);
+        
     }
 
     // Création d'un produit (post) 
@@ -57,15 +42,36 @@ class ProduitController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         // Système de validation pour l'ajout de produit avec le controleur
-        if (!$data['nom'] || !$data['prix'] || !$data['categorie']) {
+        if (!$data['nom'] || !$data['prix']) {
             return new JsonResponse(['status' => 'error', 'message' => 'Les champs nom, prix et categorie sont obligatoires'], 400);
         }
 
-        // On récupère l'objet catégorie à partir de l'ID
-        $categorie = $this->entityManager->getRepository(Categories::class)->find($data['categorie_id']);
-        if (!$categorie) {
-            return new JsonResponse(['error' => 'La catégorie est introuvable.'], JsonResponse::HTTP_NOT_FOUND);
-        }
+        // try {
+        //     $produit = new Produits();
+        //     $produit->setNom($data['nom']);
+        //     $produit->setDescription($data['description'] ?? null);
+        //     $produit->setPrix($data['prix']);
+        //     $produit->setCategorieRelation($categorie);
+        //     $produit->setDateDeCreation(new \DateTime($data['dateDeCreation']));
+    
+        //     $entityManager->persist($produit);
+        //     $entityManager->flush();
+    
+        //     return new JsonResponse([
+        //         'status' => 'success',
+        //         'message' => 'Produit créé avec succès',
+        //         'data' => [
+        //             'id' => $produit->getId(),
+        //             'nom' => $produit->getNom(),
+        //             'description' => $produit->getDescription(),
+        //             'prix' => $produit->getPrix(),
+        //             'categorie' => $produit->getCategorieRelation()->getNom(),
+        //             'dateDeCreation' => $produit->getDateDeCreation()->format('Y-m-d'),
+        //         ],
+        //     ], 200);
+        // } catch (\Exception $e) {
+        //     return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], 500);
+        // }
 
 
         // Création d'un nouveau produit
@@ -74,22 +80,32 @@ class ProduitController extends AbstractController
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCategorieRelation($categorie);
-        $produit->setDateDeCreation(new \DateTime($data['date_de_creation']));
+
+
+        // categorie_id un id correspondant à une catégorie dans la base de donnée
+        $categorie = $entityManager->getRepository(Categories::class)->find($data['categorie_id']);
+        if (!$categorie) {
+            return new JsonResponse(['error' => 'La catégorie est introuvable.'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // On affecte la catégorie récupérée
+        $produit->setCategorieRelation('$categorie');
+        $produit->setDateDeCreation(new \DateTime($data['dateDeCreation']));
 
 
         // sauvegarde dans la bdd
-        $this->entityManager->persist($produit);
-        $this->entityManager->flush();
+        $entityManager->persist($produit);
+        $entityManager->flush();
 
         // Donnée json du produit créé
         return new JsonResponse([
+            'status' => 'success',
             'message' => 'Produit créé avec succès',
             'id' => $produit->getId(),
             'nom' => $produit->getNom(),
             'description' => $produit->getDescription(),
             'prix' => $produit->getPrix(),
-            'categorie' => $produit->getCategorie(),
+            'categorie' => $produit->getCategorieRelation()->getNom(),
             'date_de_creation' => $produit->getDateDeCreation(),
         ], Response::HTTP_CREATED);
     }
@@ -135,7 +151,7 @@ class ProduitController extends AbstractController
         }
 
         // On vérifie aussi si la catégorie existe
-        $categorie = $entityManager->getRepository(Categories::class)->find($data['categorie']);
+        $categorie = $entityManager->getRepository(Categories::class)->find($data['categorie_id']);
 
         if (!$categorie) {
             return new JsonResponse(['message' => 'La catégorie n\'existe pas'], Response::HTTP_BAD_REQUEST);
@@ -146,7 +162,7 @@ class ProduitController extends AbstractController
         $produit->setNom($data['nom']);
         $produit->setDescription($data['description']);
         $produit->setPrix($data['prix']);
-        $produit->setCategorieRelation($data['categorie']);
+        $produit->setCategorieRelation($categorie);
 
         // Sauvegarde de la màj dans la bdd
         $this->getDoctrine()->getManager()->flush();

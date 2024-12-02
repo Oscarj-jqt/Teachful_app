@@ -7,6 +7,9 @@ use App\Repository\ProduitsRepository;
 use Doctrine\ORM\Mapping as ORM;
 //Gestion des collections pour la bdd
 use Doctrine\Common\Collections\ArrayCollection;
+// Gestion de contraintes
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
 class Produits
@@ -31,18 +34,18 @@ class Produits
     )]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "float")]
     #[Assert\NotBlank(message: "Le prix est obligatoire.")]
     #[Assert\Regex(
-        pattern: "/^\d+(\.\d{1,2})?$/",
         message: "Le prix doit être un nombre avec 2 chiffres maximales après la virgule."
     )]
-    private ?string $prix = null;
+    private ?float $prix = null;
 
 
-    #[ORM\Column(type: "datetime")]
-    #[Assert\NotBlank(message: "La date est obligatoire.")]
-    #[Assert\Type("\DateTimeInterface", message: "Renseignez une date valide.")]
+
+    // #[ORM\Column(type: "datetime")]
+    // #[Assert\NotBlank(message: "La date est obligatoire.")]
+    // #[Assert\Type("\DateTimeInterface", message: "Renseignez une date valide.")]
     private ?\DateTimeInterface $dateDeCreation = null;
 
 
@@ -51,12 +54,12 @@ class Produits
         return $this->id;
     }
 
-    public function setId(int $id): static
-    {
-        $this->id = $id;
+    // public function setId(int $id): static
+    // {
+    //     $this->id = $id;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getNom(): ?string
     {
@@ -82,26 +85,26 @@ class Produits
         return $this;
     }
 
-    public function getPrix(): ?string
+    public function getPrix(): ?float
     {
         return $this->prix;
     }
 
-    public function setPrix(string $prix): static
+    public function setPrix(float $prix): static
     {
         $this->prix = $prix;
 
         return $this;
     }
 
-    public function getDateDeCreation(): ?string
+    public function getDateDeCreation(): ?\DateTimeInterface
     {
-        return $this->date_de_creation;
+        return $this->dateDeCreation;
     }
 
-    public function setDateDeCreation(string $date_de_creation): static
+    public function setDateDeCreation(\DateTimeInterface $dateDeCreation): static
     {
-        $this->date_de_creation = $date_de_creation;
+        $this->dateDeCreation = $dateDeCreation;
         return $this;
     }
     // Relations n à 1 reliée à Categorie : 

@@ -16,22 +16,11 @@ class CategorieController extends AbstractController
 {
     // Récupérer toutes les catégories
     #[Route('/api/categories', name: 'get_categories', methods: ['GET'])]
-    public function getCategories(EntityManagerInterface $entityManager): Response
-    {
-        // teste récupération de toutes les catégories
-        $categories = $entityManager->getRepository(Categories::class)->findAll();
-        // stockage dans un tableau de valeurs
-        $data = [];
-
-        foreach ($categories as $categorie) {
-            $data[] = [
-                'id' => $categorie->getId(),
-                'nom' => $categorie->getNom(),
-            ];
-        }
-
-        return $this->json($data);
-    }
+    public function getCategories(CategoriesRepository $categoriesRepository)
+{
+    $categories = $categoriesRepository->findAll();
+    return $this->json($categories);
+}
 
     // Création d'une catégorie
     #[Route('/api/categories', name: 'create_categorie', methods: ['POST'])]
