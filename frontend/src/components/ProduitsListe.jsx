@@ -11,8 +11,8 @@ function ProduitsListe() {
     // initialisation des attributs
     const [nom, setNom] = useState('');
     const [description, setDescription] = useState('');
-    // float
-    const [prix, setPrix] = useState();
+    // float et ca commence à 0
+    const [prix, setPrix] = useState(0);
     const [categorieId, setCategorieId] = useState('');
 
     // état pour la modification (PUT)
@@ -125,7 +125,19 @@ function ProduitsListe() {
                 </div>
                 <div>
                     <label>Prix</label>
-                    <input type="number" value={prix} onChange={(e) => setPrix(e.target.value)} required />
+                    <input
+                        type="number"
+                        value={prix}
+                        onChange={(e) => {
+                            // Récupérer la valeur saisie
+                            const valeur = parseFloat(e.target.value);
+                            // On empêche la saisie de valeur négative
+                            if (valeur >= 0) {
+                                setPrix(valeur);
+                            }
+                        }}
+                        required
+                    />
                 </div>
                 {/* <div>
                     <label>Catégorie</label>
