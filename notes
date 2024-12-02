@@ -99,7 +99,10 @@ Problèmes de traitement des données de l'API
 On a préparé les composants React : liste de produits et de catégories
 
 Ajout de fonctionnalités React:
-Ajouter un produit -> création d'un formulaire, liaison du formulaire aux données puis envoie des requêtes (régler le back avant)
+Ajouter un produit -> création d'un formulaire
+On utilise la fonctionnalité js : https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
+
+liaison du formulaire aux données puis envoie des requêtes (régler le back avant)
 
 Pour la fin :
 Ajouter quelques fonctionnalités bonus (recherche? tri?)
