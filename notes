@@ -85,8 +85,19 @@ Faire le design system du site Teach'r sas :
 -récupérer la font style et family
 
 Documentation sur Tailwind pour élaborer le catalogue
+https://tailwindcss.com/docs/installation
+avec installation de l'extension TailwindIntelliSense (éviter les avertissements)
 
+-Commencement partie frontend
+intégration de react et tailwind dans le projet
 
 Pour la fin :
 Ajouter quelques fonctionnalités bonus (recherche? tri?)
+
+
 Déploiement avec Vercel
+
+configuration du lien avec la variable d'environnement :
+tableau de bord -> projet - > settings -> environment variables :
+REACT_APP_API_URL=https://ton-backend.vercel.app
+

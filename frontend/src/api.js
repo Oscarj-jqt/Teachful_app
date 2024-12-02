@@ -1,8 +1,7 @@
 // Fichier de consommation d'API
 
-
 // On récupère tout les produits
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = 'http://127.0.0.1:8000 ';
 
 export const fetchProduits = async () => {
     try {
@@ -25,4 +24,3 @@ export const fetchCategories = async () => {
       console.error("Erreur lors de la récupération des catégories :", error);
     }
   };
-  
