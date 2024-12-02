@@ -46,7 +46,7 @@ class Produits
     // #[ORM\Column(type: "datetime")]
     // #[Assert\NotBlank(message: "La date est obligatoire.")]
     // #[Assert\Type("\DateTimeInterface", message: "Renseignez une date valide.")]
-    private ?\DateTimeInterface $dateDeCreation = null;
+    private ?\DateTimeInterface $date_de_creation = null;
 
 
     public function getId(): ?int
@@ -99,12 +99,12 @@ class Produits
 
     public function getDateDeCreation(): ?\DateTimeInterface
     {
-        return $this->dateDeCreation;
+        return $this->date_de_creation;
     }
 
-    public function setDateDeCreation(\DateTimeInterface $dateDeCreation): static
+    public function setDateDeCreation(\DateTimeInterface $date_de_creation): self
     {
-        $this->dateDeCreation = $dateDeCreation;
+        $this->date_de_creation = $date_de_creation;
         return $this;
     }
     // Relations n à 1 reliée à Categorie : 
@@ -119,9 +119,9 @@ class Produits
         return $this->categorieRelation;
     }
 
-    public function setCategorieRelation(?Categories $categorie): self
+    public function setCategorieRelation(?Categories $categorieRelation): self
     {
-        $this->categorieRelation = $categorie;
+        $this->categorieRelation = $categorieRelation;
         return $this;
     }
 }
