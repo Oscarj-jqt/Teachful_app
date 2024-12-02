@@ -1,26 +1,22 @@
 // Fichier de consommation d'API
 
 // On récupère tout les produits
-const API_URL = 'http://127.0.0.1:8000 ';
+const api_url = 'http://127.0.0.1:8000 ';
 
 export const fetchProduits = async () => {
-    try {
-        const response = await fetch(`${API_URL}/produits`);
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error("Erreur lors de la récupération des produits :", error);
-      }
+  const response = await fetch(`${api_url}/api/produits`);
+  if (!response.ok) {
+    throw new Error('Erreur lors de la récupération des produits');
+  }
+  return await response.json();
     };
 
 
 // Maintenant les catégories
 export const fetchCategories = async () => {
-    try {
-      const response = await fetch(`${API_URL}/categories`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Erreur lors de la récupération des catégories :", error);
-    }
+  const response = await fetch(`${api_url}/api/categories`);
+  if (!response.ok) {
+    throw new Error('Erreur lors de la récupération des catégories');
+  }
+  return await response.json();
   };
