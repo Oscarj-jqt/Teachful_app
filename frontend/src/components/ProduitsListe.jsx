@@ -15,8 +15,7 @@ function ProduitsListe() {
     const [prix, setPrix] = useState();
     const [categorieId, setCategorieId] = useState('');
 
-
-    // état pour la modification 
+    // état pour la modification (PUT)
     const [produitEnCours, setProduitEnCours] = useState(null);
 
 
@@ -26,6 +25,7 @@ function ProduitsListe() {
         fetch('http://127.0.0.1:8000/api/produits')
           .then((res) => res.json())
           .then((data) => setProduits(data))
+          .catch((err) => console.error('Failed to fetch:', err));
     }, []);
 
     // Fonction d'ajout des produits
@@ -93,6 +93,24 @@ function ProduitsListe() {
     }
 
 
+    // Fonction de suppression d'un produit (DELETE)
+    const supprimerProduit = (id) => {
+        fetch(`http://127.0.0.1:8000/api/produits/${id}`, {
+            method: 'DELETE',
+        })
+        .then((res) => {
+            if (res.ok) {
+                // Si la suppression est réussie, la liste est màj
+                setProduits((prevProduits) => prevProduits.filter((produit) => produit.id !== id));
+            } else {
+                throw new Error('Erreur lors de la suppression.');
+            }
+        })
+        .catch((err) => console.error(err));
+    };
+    
+
+
         return (
             <div>
               <h1>Liste des Produits</h1>
@@ -131,6 +149,7 @@ function ProduitsListe() {
                       <th>Description</th>
                       <th>Prix</th>
                       <th>Catégorie</th>
+                      <th>Modifier/Supprimer</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -141,6 +160,7 @@ function ProduitsListe() {
                         <td>{produit.prix}</td>
                         <td>
                             <button onClick={() => modifierClick(produit)}>Modifier</button>
+                            <button onClick={() => supprimerProduit(produit.id)}>Supprimer</button>
                         </td>
                       </tr>
                     ))}

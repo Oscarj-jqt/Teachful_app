@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 
-
 function CategoriesListe() {
+
     // initialisation de l'état d'affichage (tableau categories)
     const [categories, setCategories] = useState([]);
 
@@ -16,6 +16,7 @@ function CategoriesListe() {
     fetch('http://127.0.0.1:8000/api/categories')
       .then((res) => res.json())
       .then((data) => setCategories(data))
+      .catch((err) => console.error('Failed to fetch:', err));
     }, []);
 
     // Fonction d'ajout d'une nouvelle catégorie
