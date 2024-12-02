@@ -8,6 +8,9 @@ function CategoriesListe() {
     // état pour les attributs
     const [nom, setNom] = useState("");
 
+    // État pour la catégorie en cours de modification
+    const [categorieEnCours, setCategorieEnCours] = useState(null);
+
     useEffect(() => {
     // récupération des données des catégories
     fetch('http://127.0.0.1:8000/api/categories')
@@ -40,7 +43,41 @@ function CategoriesListe() {
         })
         .catch((err) => console.error(err));
 
-};
+    };
+
+    // Fonction de modification d'une catégorie
+    const modifierCategorie = (e) => {
+        e.preventDefault();
+
+        const changeCategorie = {
+            nom: categorieEnCours.nom,
+        };
+
+
+    fetch(`http://127.0.0.1:8000/api/categories/${categorieEnCours.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(changeCategorie),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            // màj de la liste après la modification
+            setCategories((prevCategories) =>
+                prevCategories.map((categorie) =>
+                    categorie.id === data.id ? data : categorie
+                )
+            );
+            setCategorieEnCours(null);
+        })
+        .catch((err) => console.error(err));
+    };
+
+    // Fonction pour préparer la modification d'une catégorie
+    const modifierClick = (categorie) => {
+        setCategorieEnCours(categorie);
+    };
 
   return (
     <div>
@@ -57,9 +94,28 @@ function CategoriesListe() {
 
         <ul>
           {categories.map((categorie) => (
-            <li key={categorie.id}>{categorie.nom}</li>
+            <li key={categorie.id}>{categorie.nom}
+                <button onClick={() => modifierClick(categorie)}>Modifier</button>
+            </li>
           ))}
         </ul>
+
+        {/* Formulaire pour modifier une catégorie */}
+        {categorieEnCours && (
+                <form onSubmit={modifierCategorie}>
+                    <h2>Modifier la catégorie</h2>
+                    <input type="text" value={categorieEnCours.nom} onChange={(e) =>
+                    // Mise à jour de l'état de la catégorie en cours (modification du nom)
+                            setCategorieEnCours({...categorieEnCours,nom: e.target.value,})
+                    }
+                        
+                    required/>
+                    <button type="submit">Modifier</button>
+                    <button onClick={() => setCategorieEnCours(null)}>Annuler</button>
+                </form>
+            )}
+
+
     </div>
   );
 }
