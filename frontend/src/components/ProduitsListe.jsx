@@ -1,7 +1,4 @@
 import { React, useEffect, useState } from "react";
-// import { fetchProduits } from "../api";
-// import { fetchCategories } from '../api';
-
 
 // Composant qui gère l'affichage et les opération CRUD des produits
 function ProduitsListe() {
@@ -25,7 +22,7 @@ function ProduitsListe() {
         fetch('http://127.0.0.1:8000/api/produits')
           .then((res) => res.json())
           .then((data) => setProduits(data))
-          .catch((err) => console.error('Failed to fetch:', err));
+          .catch((err) => console.error('Erreur dans la récupération des données', err));
     }, []);
 
     // Fonction d'ajout des produits
@@ -113,8 +110,8 @@ function ProduitsListe() {
 
         return (
             <div>
-              <h1>Liste des Produits</h1>
-              <form onSubmit={ajoutProduit}>
+                <h1>Liste des Produits</h1>
+                <form onSubmit={ajoutProduit}>
                 <div>
                     <label>Nom</label>
                     <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} required/>
@@ -150,7 +147,7 @@ function ProduitsListe() {
                     ))}
                     </select>
                 </div> */}
-                    <button type="submit">Ajouter le produit</button>
+                <button type="submit">Ajouter le produit</button>
                 </form>
 
                 <h2>Les Produits</h2>
@@ -182,6 +179,7 @@ function ProduitsListe() {
                 {produitEnCours && (
                     <form onSubmit={modifierProduit}>
                         <h2>Modifier le produit</h2>
+                        {/* Champ pour modifier le nom du produit  */}
                         <input type="text" value={produitEnCours.nom} onChange={(e) => setProduitEnCours({ ...produitEnCours, nom: e.target.value })} placeholder="Nom"/>
                         <input type="text" value={produitEnCours.description} onChange={(e) => setProduitEnCours({ ...produitEnCours, description: e.target.value,})} placeholder="Description"/>
                         <input type="number" value={produitEnCours.prix} onChange={(e) => setProduitEnCours({ ...produitEnCours, prix: parseFloat(e.target.value),})}placeholder="Prix"/>
