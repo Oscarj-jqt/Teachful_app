@@ -108,6 +108,10 @@ Fin du CRUD pour le front
 
 Commencement de la partie avec Redux devTools : https://redux.js.org/introduction/getting-started
 Créations de la structure redux dans le projet React
+Intégrer redux aux composants (il manque pour produits)
+Régler l'affichage du navigateur (page vierge)
+
+La suite design system
 
 
 Pour la fin :
