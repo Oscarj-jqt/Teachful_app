@@ -1,9 +1,13 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+    resource: '../src/Controller/'
     type: attribute
-    api_login:
+
+api_login:
     path: /api/login
     controller: App\Controller\AuthController::login
+    methods: POST
 
+test_endpoint:
+    path: /api/test
+    controller: App\Controller\AuthController::test
+    methods: GET

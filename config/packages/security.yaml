@@ -1,11 +1,13 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    App\Entity\User:algorithm: auto
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     # encoders:
     #     Symfony\Component\Security\Core\User\UserInterface:
     #         algorithm: auto
+    
     providers:
         app_user_provider:
             entity:

@@ -7,29 +7,33 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class AuthController extends AbstractController
 {
     private $userRepository;
-    private $passwordEncoder;
+    private $passwordHasher;
     private $jwtManager;
 
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
-        JWTManager $jwtManager
+        UserPasswordHasherInterface $passwordHasher,
+        JWTTokenManagerInterface $jwtManager
     ) {
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->jwtManager = $jwtManager;
     }
 
+
     public function login(Request $request): JsonResponse
     {
+        dump('login called');
         $data = json_decode($request->getContent(), true);
+        dump($data);
+        die();
 
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
@@ -41,7 +45,7 @@ class AuthController extends AbstractController
         // Recherche de l'utilisateur par email
         $user = $this->userRepository->findOneBy(['email' => $email]);
 
-        if (!$user || !$this->passwordEncoder->isPasswordValid($user, $password)) {
+        if (!$user || !$this->passwordHasher->isPasswordValid($user, $password)) {
             return new JsonResponse(['message' => 'Invalid credentials'], 401);
         }
 
