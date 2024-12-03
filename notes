@@ -112,6 +112,11 @@ Commencement du niveau 3
 On va intégrer l'authentification JWT côté backend
 
 Fin de la partie sur l'authentification JWT. Des bugs persistent lors du test Postman malgré tout.
+
+On peut faire une simulation du projet avec des données factices
+Utilisation de json-server pour générer ces données
+Puis tester le front
+
 En front, on va ajouter barre de recherche et le tri
 Et enfin déploiement avec Vercel pour le front
 
