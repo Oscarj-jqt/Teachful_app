@@ -7,18 +7,19 @@ module.exports = {
     extend: {
       colors: {
         // Bleu foncé 
-        primary: '#004066',
+        primary: 'rgb(0, 64, 102)',
         // Bleu clair 
-        secondary: '#219CFF',
+        secondary: 'rgb(3, 156, 255)',
         // Orange foncé 
-        accent: '#CD694F',
+        accent: 'rgb(205, 105, 83)',
         // Orange clair 
-        highlight: '#EC704D',
+        highlight: 'rgb(236, 112, 77)',
         white: '#FFFFFF',
         black: '#000000',
       },
       fontFamily: {
-        sans: ['Roboto', 'Arial', 'sans-serif'],
+        roboto: ['Roboto', 'Arial', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif']
       },
     },
   },
