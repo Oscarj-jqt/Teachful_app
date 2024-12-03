@@ -94,6 +94,12 @@ avec installation de l'extension TailwindIntelliSense (éviter les avertissement
 -Commencement partie frontend
 intégration de react et tailwind dans le projet
 
+Fin de l'interface utilisateur
+
+On doit maintenant implémenter des messages d'erreur pour l'UX/ui
+--> ajouter état d'erreur dans Redux
+--> l'intégrer dans les composants
+
 Le backend n'est pas complètement terminé (70%)
 Problèmes de traitement des données de l'API
 On a préparé les composants React : liste de produits et de catégories
