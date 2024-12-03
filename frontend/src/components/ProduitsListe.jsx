@@ -95,7 +95,7 @@ function ProduitsListe() {
     
         return (
           <div className="min-h-screen bg-gray-50 p-6 font-sans">
-            <h1 className="text-3xl font-bold text-primary mb-4">Liste des Produits</h1>
+            <h1 className="text-3xl font-bold text-primary mb-4">Ajouter un produit</h1>
 
             <form onSubmit={handleAjouterProduit} className="bg-white p-6 rounded-lg shadow-lg mb-6">
                 <div className="mb-4">
@@ -140,7 +140,7 @@ function ProduitsListe() {
                 </button>
             </form>
 
-            <h2 className="text-2xl font-bold text-primary mb-4">Les Produits</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Liste des produits</h2>
             <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
                 <thead className="bg-primary text-white">
                     <tr>

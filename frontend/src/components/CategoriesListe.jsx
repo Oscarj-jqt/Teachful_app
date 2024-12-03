@@ -92,7 +92,7 @@ function CategoriesListe() {
     };
     return (
         <div className="min-h-screen bg-gray-50 p-6 font-sans">
-        <h1 className="text-3xl font-bold text-primary mb-4">Liste des Catégories</h1>
+        <h1 className="text-3xl font-bold text-primary mb-4">Ajouter une catégorie</h1>
 
         <form onSubmit={ajoutCategorie} className="bg-white p-4 rounded-lg shadow-md mb-6">
             <div className="mb-4">
@@ -112,6 +112,36 @@ function CategoriesListe() {
                 Ajouter la catégorie
             </button>
         </form>
+
+        <h2 className="text-2xl font-bold text-primary mb-4">Liste des catégories</h2>
+        <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
+            <thead className="bg-primary text-white">
+                <tr>
+                    <th className="px-4 py-2">Nom</th>
+                    <th className="px-4 py-2">Modifier/Supprimer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {categories.map((categorie) => (
+                    <tr key={categorie.id} className="border-t border-gray-300">
+                        <td className="px-4 py-2">{categorie.nom}</td>
+                        <td className="px-4 py-2">
+                        <button
+                            onClick={() => setCategorieEnCours(categorie)}
+                            className="bg-secondary text-white px-4 py-2 rounded-md mr-2 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-secondary">
+                            Modifier
+                        </button>
+                        <button
+                            onClick={() => handleSupprimerCategorie(categorie.id)}
+                            className="bg-accent text-white px-4 py-2 rounded-md hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-accent">
+                            Supprimer
+                        </button>
+                        </td>
+                    </tr>
+    ))}
+    </tbody>
+</table>
+
 
         <ul className="space-y-4">
             {categories.map((categorie) => (
@@ -161,6 +191,8 @@ function CategoriesListe() {
                     </button>
                 </div>
             </form>
+
+            
         )}
     </div>
     );
