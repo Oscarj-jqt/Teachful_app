@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 // hook redux pour la gestion des données
 import { useDispatch, useSelector } from "react-redux";
-import { ajouterCategorie, modifierCategorie, supprimerCategorie } from "../redux/reducers/categoriesReducer";
+import { ajouterCategorie, modifierCategorie, supprimerCategorie, setErreurCategorie } from "../redux/reducers/categoriesReducer";
 import '../../src/index.css';
 
 function CategoriesListe() {
@@ -9,7 +9,8 @@ function CategoriesListe() {
     const dispatch = useDispatch();
     // useSelector pour récupérer les catégories depuis l'état global de Redux (pas useState)
     const categories = useSelector((state) => state.categories.categories);
-
+    // Récupérer l'erreur du Redux store
+    const erreur = useSelector((state) => state.categories.erreur);
     // état pour les attributs
     const [nom, setNom] = useState("");
     // État pour la catégorie en cours de modification
@@ -47,8 +48,10 @@ function CategoriesListe() {
             dispatch(ajouterCategorie(data));
             setNom("");
         })
-        .catch((err) => console.error(err));
-
+        .catch((err) => {
+            console.error(err);
+            dispatch(setErreurCategorie("Erreur lors de l'ajout de la catégorie"));
+        });
     };
 
     // Fonction de modification d'une catégorie
@@ -65,16 +68,15 @@ function CategoriesListe() {
         })
         .then((res) => res.json())
         .then((data) => {
-            dispatch(modifierCategorie(data)); // Envoi de l'action Redux
+            // Envoi de l'action Redux
+            dispatch(modifierCategorie(data));
             setCategorieEnCours(null);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+            console.error(err);
+            dispatch(setErreurCategorie("Erreur lors de la modification de la catégorie"));
+          });
     };
-
-    // // Fonction pour préparer la modification d'une catégorie
-    // const handleModifierClick = (categorie) => {
-    //     setCategorieEnCours(categorie);
-    // };
 
     // Fonction pour supprimer une catégorie
     const handleSupprimerCategorie = (id) => {
@@ -88,7 +90,10 @@ function CategoriesListe() {
                     console.error("Erreur de suppression de la catégorie");
                 }
             })
-            .catch((err) => console.error("Erreur dans la tentative de suppression de la catégorie :", err));
+            .catch((err) => {
+                console.error(err);
+                dispatch(setErreurCategorie("Erreur lors de la supression de la catégorie"));
+              });
     };
     return (
         <div className="min-h-screen bg-gray-50 p-6 font-sans">
