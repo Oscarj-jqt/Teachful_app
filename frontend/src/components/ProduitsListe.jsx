@@ -106,8 +106,6 @@ function ProduitsListe() {
         .catch((err) => console.error(err));
     };
     
-
-
         return (
             <div>
                 <h1>Liste des Produits</h1>

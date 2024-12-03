@@ -104,6 +104,12 @@ On utilise la fonctionnalité js : https://developer.mozilla.org/en-US/docs/Web/
 
 liaison du formulaire aux données puis envoie des requêtes (régler le back avant)
 
+Fin du CRUD pour le front
+
+Commencement de la partie avec Redux devTools : https://redux.js.org/introduction/getting-started
+Créations de la structure redux dans le projet React
+
+
 Pour la fin :
 Ajouter quelques fonctionnalités bonus (recherche? tri?)
 
