@@ -31,10 +31,10 @@ const produitsSlice = createSlice({
       }
     },
     setErreurProduit: (state, action) => {
-      state.erreur = action.payload; // Action pour définir l'erreur
+      state.erreur = action.payload;
     },
     resetErreurProduit: (state) => {
-      state.erreur = null; // Action pour réinitialiser l'erreur
+      state.erreur = null;
     }
   },
 });

@@ -54,6 +54,7 @@ class Produits
         return $this->id;
     }
 
+    // le setteur génère automatiquement
     // public function setId(int $id): static
     // {
     //     $this->id = $id;

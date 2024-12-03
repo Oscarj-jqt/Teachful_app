@@ -113,3 +113,6 @@ On va intégrer l'authentification JWT côté backend
 En front, on va ajouter barre de recherche et le tri
 Et enfin déploiement avec Vercel pour le front
 
+Installation du package gérant le JWT
+Configuration des dépendances php pour l'apdapter
+

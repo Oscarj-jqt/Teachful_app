@@ -39,7 +39,7 @@ const categoriesSlice = createSlice({
     },
     resetErreurCategorie: (state) => {
       // L'action pour réinitialiser l'erreur
-      state.erreur = null; // Action pour réinitialiser l'erreur
+      state.erreur = null;
     }
   },
 });
