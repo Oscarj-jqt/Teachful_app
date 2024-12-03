@@ -1,0 +1,23 @@
+Design System de Teachful'r SAS
+
+Couleurs principales et nuances
+
+Bleu foncé (arrière-plan principal):
+rgb(0, 64, 102)
+
+Bleu clair (arrière-plan bouton):
+rgb(33, 156, 255)
+
+Orange foncé
+rgb(205, 105, 83)
+
+Orange clair
+rgb(236, 112, 77)
+
+
+Ecritures
+
+Blanc(sur fond foncé)
+rgb(255, 255, 255)
+
+noir
