@@ -21,3 +21,17 @@ Blanc(sur fond foncé)
 rgb(255, 255, 255)
 
 noir
+rgb(0, 0, 0)
+
+
+Logo en format 120x49.5
+
+font-size 
+Texte de présentation : 2.75rem
+sous-présentation : 1.17rem
+
+body: 1rem
+
+font-family
+Police principale :
+font-family: Roboto, Arial, sans-serif;
