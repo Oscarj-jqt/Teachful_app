@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ajouterProduit, modifierProduit, supprimerProduit } from "../redux/reducers/produitsReducer";
+import { ajouterProduit, modifierProduit, supprimerProduit, setErreurProduit } from "../redux/reducers/produitsReducer";
 import '../../src/index.css';
 // Composant qui gère l'affichage et les opération CRUD des produits
 function ProduitsListe() {
@@ -8,7 +8,7 @@ function ProduitsListe() {
     const dispatch = useDispatch();
     // Récupération des produits depuis Redux
     const produits = useSelector((state) => state.produits.produits);
-    
+    const erreur = useSelector((state) => state.produits.erreur);
 
     // initialisation des attributs
     const [nom, setNom] = useState('');
@@ -56,7 +56,10 @@ function ProduitsListe() {
           setPrix(0);
           setCategorieId("");
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+            console.error(err);
+            dispatch(setErreurProduit("Erreur lors de l'ajout du produit"));
+          });
     };
 
     // Fonction de modification de produit
@@ -74,7 +77,10 @@ function ProduitsListe() {
               dispatch(modifierProduit(data));
               setProduitEnCours(null);
           })
-          .catch((err) => console.error(err));
+          .catch((err) => {
+            console.error(err);
+            dispatch(setErreurProduit("Erreur lors de la modification du produit"));
+          });
     }
 
 
@@ -90,7 +96,10 @@ function ProduitsListe() {
             throw new Error("Erreur lors de la suppression.");
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+            console.error(err);
+            dispatch(setErreurProduit("Erreur lors de la supression du produit"));
+          });
     };
     
         return (

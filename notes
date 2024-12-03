@@ -28,24 +28,6 @@ obtenir la catégorie d’un produit :
 $produit = $produitsRepository->find(1);
 echo $produit->getCategorieRelation()->getNom();
 
-// Dans ton contrôleur ou un script PHP :
-
-// Récupérer le repository des catégories
-$categoriesRepository = $entityManager->getRepository(Categories::class);
-
-// Récupérer la catégorie avec l'ID 1
-$categorie = $categoriesRepository->find(1);
-
-// Vérifier que la catégorie existe
-if ($categorie) {
-    // Parcourir tous les produits de cette catégorie
-    foreach ($categorie->getProduits() as $produit) {
-        echo 'Nom du produit : ' . $produit->getNom() . PHP_EOL;
-    }
-} else {
-    echo "Catégorie introuvable.";
-}
-
 
 
 -Passer à la validation des données avec : 
@@ -96,9 +78,6 @@ intégration de react et tailwind dans le projet
 
 Fin de l'interface utilisateur
 
-On doit maintenant implémenter des messages d'erreur pour l'UX/ui
---> ajouter état d'erreur dans Redux
---> l'intégrer dans les composants
 
 Le backend n'est pas complètement terminé (70%)
 Problèmes de traitement des données de l'API
@@ -120,13 +99,17 @@ Régler l'affichage du navigateur (page vierge)
 La suite design system
 
 
+On doit maintenant implémenter des messages d'erreur pour l'UX/ui
+--> ajouter état d'erreur dans Redux
+--> l'intégrer dans les composants
+
+Fin de la gestion des erreurs avec Redux (bien intégré au projet)
+
 Pour la fin :
 Ajouter quelques fonctionnalités bonus (recherche? tri?)
 
-
-Déploiement avec Vercel
-
-configuration du lien avec la variable d'environnement :
-tableau de bord -> projet - > settings -> environment variables :
-REACT_APP_API_URL=https://ton-backend.vercel.app
+Commencement du niveau 3
+On va intégrer l'authentification JWT côté backend
+En front, on va ajouter barre de recherche et le tri
+Et enfin déploiement avec Vercel pour le front
 
