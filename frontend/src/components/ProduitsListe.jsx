@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ajouterProduit, modifierProduit, supprimerProduit } from "../redux/reducers/produitsReducer";
+import '../../src/index.css';
 // Composant qui gère l'affichage et les opération CRUD des produits
 function ProduitsListe() {
 
@@ -93,85 +94,123 @@ function ProduitsListe() {
     };
     
         return (
-            <div>
-                <h1>Liste des Produits</h1>
-                <form onSubmit={handleAjouterProduit}>
-                <div>
-                    <label>Nom</label>
-                    <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} required/>
+          <div className="min-h-screen bg-gray-50 p-6 font-sans">
+            <h1 className="text-3xl font-bold text-primary mb-4">Liste des Produits</h1>
+
+            <form onSubmit={handleAjouterProduit} className="bg-white p-6 rounded-lg shadow-lg mb-6">
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Nom</label>
+                    <input
+                        type="text"
+                        value={nom}
+                        onChange={(e) => setNom(e.target.value)}
+                        required
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+                    />
                 </div>
-                <div>
-                    <label>Description</label>
-                    <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required/>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Description</label>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+                    />
                 </div>
-                <div>
-                    <label>Prix</label>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Prix</label>
                     <input
                         type="number"
                         value={prix}
                         onChange={(e) => {
-                            // Récupérer la valeur saisie
                             const valeur = parseFloat(e.target.value);
-                            // On empêche la saisie de valeur négative
                             if (valeur >= 0) {
                                 setPrix(valeur);
                             }
                         }}
                         required
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
                     />
                 </div>
-                {/* <div>
-                    <label>Catégorie</label>
-                    <select value={categorieId} onChange={(e) => setCategorieId(e.target.value)} required>
-                    <option value="">Sélectionner une catégorie</option>
-                    {categorieId.map((categorie) => (
-                        <option key={categorie.id} value={categorie.id}>
-                            {categorie.nom}
-                        </option>
-                    ))}
-                    </select>
-                </div> */}
-                <button type="submit">Ajouter le produit</button>
-                </form>
+                <button
+                    type="submit"
+                    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary">
+                    Ajouter le produit
+                </button>
+            </form>
 
-                <h2>Les Produits</h2>
-                <table>
-                  <thead>
+            <h2 className="text-2xl font-bold text-primary mb-4">Les Produits</h2>
+            <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
+                <thead className="bg-primary text-white">
                     <tr>
-                      <th>Nom</th>
-                      <th>Description</th>
-                      <th>Prix</th>
-                      {/* <th>Catégorie</th> */}
-                      <th>Modifier/Supprimer</th>
+                        <th className="px-4 py-2">Nom</th>
+                        <th className="px-4 py-2">Description</th>
+                        <th className="px-4 py-2">Prix</th>
+                        <th className="px-4 py-2">Modifier/Supprimer</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                </thead>
+                <tbody>
                     {produits.map((produit) => (
-                      <tr key={produit.id}>
-                        <td>{produit.nom}</td>
-                        <td>{produit.description}</td>
-                        <td>{produit.prix}</td>
-                        <td>
-                        <button onClick={() => setProduitEnCours(produit)}>Modifier</button>
-                            <button onClick={() => handleSupprimerProduit(produit.id)}>Supprimer</button>
-                        </td>
-                      </tr>
+                        <tr key={produit.id} className="border-t border-gray-300">
+                            <td className="px-4 py-2">{produit.nom}</td>
+                            <td className="px-4 py-2">{produit.description}</td>
+                            <td className="px-4 py-2">{produit.prix}</td>
+                            <td className="px-4 py-2">
+                                <button
+                                    onClick={() => setProduitEnCours(produit)}
+                                    className="bg-secondary text-white px-4 py-2 rounded-md mr-2 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-secondary"
+                                >
+                                    Modifier
+                                </button>
+                                <button
+                                    onClick={() => handleSupprimerProduit(produit.id)}
+                                    className="bg-accent text-white px-4 py-2 rounded-md hover:bg-highlight focus:outline-none focus:ring-2 focus:ring-accent"
+                                >
+                                    Supprimer
+                                </button>
+                            </td>
+                        </tr>
                     ))}
-                  </tbody>
-                </table>
+                </tbody>
+            </table>
 
-                  {produitEnCours && (
-                    <form onSubmit={handleModifierProduit}>
-                        <h2>Modifier le produit</h2>
-                        {/* Champ pour modifier le nom du produit  */}
-                        <input type="text" value={produitEnCours.nom} onChange={(e) => setProduitEnCours({ ...produitEnCours, nom: e.target.value })} placeholder="Nom"/>
-                        <input type="text" value={produitEnCours.description} onChange={(e) => setProduitEnCours({ ...produitEnCours, description: e.target.value,})} placeholder="Description"/>
-                        <input type="number" value={produitEnCours.prix} onChange={(e) => setProduitEnCours({ ...produitEnCours, prix: parseFloat(e.target.value),})}placeholder="Prix"/>
-                        <button type="submit">Modifier</button>
-                        <button onClick={() => setProduitEnCours(null)}>Annuler</button>
-                    </form>
-                  )}
-            </div>
+            {produitEnCours && (
+                <form onSubmit={handleModifierProduit} className="bg-white p-6 rounded-lg shadow-lg mt-6">
+                    <h2 className="text-2xl font-bold text-primary mb-4">Modifier le produit</h2>
+                    <input
+                        type="text"
+                        value={produitEnCours.nom}
+                        onChange={(e) => setProduitEnCours({ ...produitEnCours, nom: e.target.value })}
+                        className="mb-4 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+                    />
+                    <input
+                        type="text"
+                        value={produitEnCours.description}
+                        onChange={(e) => setProduitEnCours({ ...produitEnCours, description: e.target.value })}
+                        className="mb-4 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+                    />
+                    <input
+                        type="number"
+                        value={produitEnCours.prix}
+                        onChange={(e) => setProduitEnCours({ ...produitEnCours, prix: parseFloat(e.target.value) })}
+                        className="mb-4 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+                    />
+                    <button
+                        type="submit"
+                        className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
+                    >
+                        Modifier
+                    </button>
+                    <button
+                        onClick={() => setProduitEnCours(null)}
+                        className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 ml-2"
+                    >
+                        Annuler
+                    </button>
+                </form>
+            )}
+        </div>
         );
 }
 

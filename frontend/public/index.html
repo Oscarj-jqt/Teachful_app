@@ -28,7 +28,30 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <h1 className="text-primary font-bold text-4xl">Bienvenue sur Teachful App</h1>
+
+
+    <!-- Header -->
+    <header class="bg-primary p-4 shadow-md">
+      <div class="container mx-auto flex items-center justify-between">
+        <!-- Logo Teachful -->
+        <div class="text-highlight text-4xl font-bold">Teachful</div>
+        <!-- Ajouter une icône de menu si nécessaire -->
+      </div>
+    </header>
+    <!-- Section de présentation (Cadre avec fond bleu) -->
+    <section class="bg-primary text-white p-6 text-center">
+      <div class="container mx-auto">
+        <h2 class="text-xl md:text-4xl font-semibold">
+          Bienvenue dans l'application Teachful !<br />
+          Découvrez une plateforme intuitive pour apprendre et enseigner avec facilité.
+        </h2>
+      </div>
+    </section>
+
+
+    <!-- Contenu principal -->
+    <main class="min-h-screen p-6">
+      <div id="root"></div> <!-- Composants React seront rendus ici -->
+    </main>
   </body>
 </html>

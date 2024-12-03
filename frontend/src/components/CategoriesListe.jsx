@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 // hook redux pour la gestion des données
 import { useDispatch, useSelector } from "react-redux";
 import { ajouterCategorie, modifierCategorie, supprimerCategorie } from "../redux/reducers/categoriesReducer";
+import '../../src/index.css';
 
 function CategoriesListe() {
 
@@ -70,10 +71,10 @@ function CategoriesListe() {
         .catch((err) => console.error(err));
     };
 
-    // Fonction pour préparer la modification d'une catégorie
-    const handleModifierClick = (categorie) => {
-        setCategorieEnCours(categorie);
-    };
+    // // Fonction pour préparer la modification d'une catégorie
+    // const handleModifierClick = (categorie) => {
+    //     setCategorieEnCours(categorie);
+    // };
 
     // Fonction pour supprimer une catégorie
     const handleSupprimerCategorie = (id) => {
@@ -90,51 +91,78 @@ function CategoriesListe() {
             .catch((err) => console.error("Erreur dans la tentative de suppression de la catégorie :", err));
     };
     return (
-        <div>
-            <h1>Liste des Catégories</h1>
+        <div className="min-h-screen bg-gray-50 p-6 font-sans">
+        <h1 className="text-3xl font-bold text-primary mb-4">Liste des Catégories</h1>
 
-            {/* Formulaire pour ajouter une catégorie */}
-            <form onSubmit={ajoutCategorie}>
-            <div>
-                <label>Nom de la catégorie</label>
-                <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} required/>
+        <form onSubmit={ajoutCategorie} className="bg-white p-4 rounded-lg shadow-md mb-6">
+            <div className="mb-4">
+                <label htmlFor="categorie" className="block text-gray-700 text-sm font-medium">Nom de la catégorie</label>
+                <input
+                    type="text"
+                    id="categorie"
+                    value={nom}
+                    onChange={(e) => setNom(e.target.value)}
+                    required
+                    className="mt-2 p-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
             </div>
-            <button type="submit">Ajouter la catégorie</button>
+            <button
+                type="submit"
+                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary">
+                Ajouter la catégorie
+            </button>
+        </form>
+
+        <ul className="space-y-4">
+            {categories.map((categorie) => (
+                <li key={categorie.id} className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md">
+                    <span className="text-lg font-medium text-gray-700">{categorie.nom}</span>
+                    <div className="space-x-2">
+                        <button
+                            onClick={() => setCategorieEnCours(categorie)}
+                            className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-200"
+                        >
+                            Modifier
+                        </button>
+                        <button
+                            onClick={() => handleSupprimerCategorie(categorie.id)}
+                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
+                        >
+                            Supprimer
+                        </button>
+                    </div>
+                </li>
+            ))}
+        </ul>
+
+        {categorieEnCours && (
+            <form onSubmit={handleModifierCategorie} className="bg-white p-4 rounded-lg shadow-md mt-6">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">Modifier la catégorie</h2>
+                <input
+                    type="text"
+                    value={categorieEnCours.nom}
+                    onChange={(e) => setCategorieEnCours({ ...categorieEnCours, nom: e.target.value })}
+                    required
+                    className="mt-2 p-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="mt-4 flex justify-between">
+                    <button
+                        type="submit"
+                        className="py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200"
+                    >
+                        Modifier
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setCategorieEnCours(null)}
+                        className="py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-200"
+                    >
+                        Annuler
+                    </button>
+                </div>
             </form>
-
-            <ul>
-                {categories.map((categorie) => (
-                    <li key={categorie.id}>{categorie.nom}
-                    <button onClick={() => handleModifierClick(categorie)}>Modifier</button>
-                    </li>
-                ))}
-            </ul>
-
-            {/* Formulaire pour modifier une catégorie */}
-            {categorieEnCours && (
-                <form onSubmit={handleModifierCategorie}>
-                    <h2>Modifier la catégorie</h2>
-                    <input type="text" value={categorieEnCours.nom} onChange={(e) =>
-                        // Mise à jour de l'état de la catégorie en cours (modification du nom)
-                            setCategorieEnCours({...categorieEnCours,nom: e.target.value,})
-                    }   
-                    required/>
-                    <button type="submit">Modifier</button>
-                    <button onClick={() => setCategorieEnCours(null)}>Annuler</button>
-                </form>
-            )}
-
-            {/* Liste des catégories avec un bouton de suppression et de modification */}
-            <ul>
-                {categories.map((categorie) => (
-                    <li key={categorie.id}>
-                        {categorie.nom}
-                        <button onClick={() => handleModifierClick(categorie)}>Modifier</button>
-                        <button onClick={() => handleSupprimerCategorie(categorie.id)}>Supprimer</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        )}
+    </div>
     );
 }
 

@@ -9,7 +9,7 @@ import store from './redux/store.js';
 const App = () => {
   return (
     <Provider store={store}>
-      <div>
+      <div className="min-h-screen bg-gray-100 p-6">
         <CategoriesListe />
         <ProduitsListe />
       </div>
