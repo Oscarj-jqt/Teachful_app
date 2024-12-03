@@ -1,13 +1,16 @@
 import { React, useEffect, useState } from "react";
+// hook redux pour la gestion des données
+import { useDispatch, useSelector } from "react-redux";
+import { ajouterCategorie, modifierCategorie, supprimerCategorie } from "../redux/reducers/categoriesReducer";
 
 function CategoriesListe() {
+    const dispatch = useDispatch();
 
-    // initialisation de l'état d'affichage (tableau categories)
-    const [categories, setCategories] = useState([]);
+    // useSelector pour récupérer les catégories depuis l'état global de Redux (pas useState)
+    const categories = useSelector((state) => state.categories.categories);
 
     // état pour les attributs
     const [nom, setNom] = useState("");
-
     // État pour la catégorie en cours de modification
     const [categorieEnCours, setCategorieEnCours] = useState(null);
 
@@ -15,18 +18,19 @@ function CategoriesListe() {
     useEffect(() => {
     // récupération des données des catégories
     fetch('http://127.0.0.1:8000/api/categories')
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error('Erreur dans la récupération des données', err));
-    }, []);
+        .then((res) => res.json())
+        .then((data) => {
+            // Envoi de l'action Redux pour stocker les catégories dans le store
+            data.forEach(categorie => dispatch(ajouterCategorie(categorie)));
+        })
+        .catch((err) => console.error('Erreur dans la récupération des données', err));
+    }, [dispatch]);
 
     // Fonction d'ajout d'une nouvelle catégorie
     const ajoutCategorie = (e) => {
         e.preventDefault();
     
-        const nouvelleCategorie = {
-          nom: nom,
-        };
+        const nouvelleCategorie = { nom: nom };
 
         // Envoie de la requête API pour ajouter la catégorie
         fetch("http://127.0.0.1:8000/api/categories", {
@@ -38,9 +42,8 @@ function CategoriesListe() {
         })
         .then((res) => res.json())
         .then((data) => {
-            // Màj de la liste des catégories
-            setCategories((prevCategories) => [...prevCategories, data]);
-            // on réinitialise l'état de l'input
+            // Action avec Redux
+            dispatch(ajouterCategorie(data));
             setNom("");
         })
         .catch((err) => console.error(err));
@@ -48,29 +51,20 @@ function CategoriesListe() {
     };
 
     // Fonction de modification d'une catégorie
-    const modifierCategorie = (e) => {
+    const handleModifierCategorie = (e) => {
         e.preventDefault();
 
-        const changeCategorie = {
-            nom: categorieEnCours.nom,
-        };
+        const changeCategorie = { nom: categorieEnCours.nom };
 
 
         fetch(`http://127.0.0.1:8000/api/categories/${categorieEnCours.id}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(changeCategorie),
         })
         .then((res) => res.json())
         .then((data) => {
-            // màj de la liste après la modification
-            setCategories((prevCategories) =>
-                prevCategories.map((categorie) =>
-                    categorie.id === data.id ? data : categorie
-                )
-            );
+            dispatch(modifierCategorie(data)); // Envoi de l'action Redux
             setCategorieEnCours(null);
         })
         .catch((err) => console.error(err));
@@ -82,20 +76,18 @@ function CategoriesListe() {
     };
 
     // Fonction pour supprimer une catégorie
-    const supprimerCategorie = (id) => {
+    const handleSupprimerCategorie = (id) => {
         // Appel de la méthode delete pour la suppression
-        fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
-            method: "DELETE",
-        })
-        .then((res) => {
-            if (res.ok) {
-                // La liste se met à jour après une suppression réussie
-                setCategories(categories.filter((categorie) => categorie.id !== id));
-            } else {
-                console.error("Erreur de suppression de la catégorie");
-            }
-        })
-        .catch((err) => console.error("Erreur dans la tentative de suppression de la catégorie :", err));
+        fetch(`http://127.0.0.1:8000/api/categories/${id}`, { method: "DELETE" })
+            .then((res) => {
+                if (res.ok) {
+                    // Appel action redux pour supprimer la catégorie
+                    dispatch(supprimerCategorie(id));
+                } else {
+                    console.error("Erreur de suppression de la catégorie");
+                }
+            })
+            .catch((err) => console.error("Erreur dans la tentative de suppression de la catégorie :", err));
     };
     return (
         <div>
@@ -120,7 +112,7 @@ function CategoriesListe() {
 
             {/* Formulaire pour modifier une catégorie */}
             {categorieEnCours && (
-                <form onSubmit={modifierCategorie}>
+                <form onSubmit={handleModifierCategorie}>
                     <h2>Modifier la catégorie</h2>
                     <input type="text" value={categorieEnCours.nom} onChange={(e) =>
                         // Mise à jour de l'état de la catégorie en cours (modification du nom)
@@ -138,7 +130,7 @@ function CategoriesListe() {
                     <li key={categorie.id}>
                         {categorie.nom}
                         <button onClick={() => modifierClick(categorie)}>Modifier</button>
-                        <button onClick={() => supprimerCategorie(categorie.id)}>Supprimer</button>
+                        <button onClick={() => handleSupprimerCategorie(categorie.id)}>Supprimer</button>
                     </li>
                 ))}
             </ul>
