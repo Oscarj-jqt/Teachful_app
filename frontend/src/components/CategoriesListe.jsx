@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ajouterCategorie, modifierCategorie, supprimerCategorie } from "../redux/reducers/categoriesReducer";
 
 function CategoriesListe() {
-    
+
     const dispatch = useDispatch();
     // useSelector pour récupérer les catégories depuis l'état global de Redux (pas useState)
     const categories = useSelector((state) => state.categories.categories);
@@ -71,7 +71,7 @@ function CategoriesListe() {
     };
 
     // Fonction pour préparer la modification d'une catégorie
-    const modifierClick = (categorie) => {
+    const handleModifierClick = (categorie) => {
         setCategorieEnCours(categorie);
     };
 
@@ -105,7 +105,7 @@ function CategoriesListe() {
             <ul>
                 {categories.map((categorie) => (
                     <li key={categorie.id}>{categorie.nom}
-                    <button onClick={() => modifierClick(categorie)}>Modifier</button>
+                    <button onClick={() => handleModifierClick(categorie)}>Modifier</button>
                     </li>
                 ))}
             </ul>
@@ -129,7 +129,7 @@ function CategoriesListe() {
                 {categories.map((categorie) => (
                     <li key={categorie.id}>
                         {categorie.nom}
-                        <button onClick={() => modifierClick(categorie)}>Modifier</button>
+                        <button onClick={() => handleModifierClick(categorie)}>Modifier</button>
                         <button onClick={() => handleSupprimerCategorie(categorie.id)}>Supprimer</button>
                     </li>
                 ))}

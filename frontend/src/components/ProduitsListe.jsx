@@ -1,12 +1,13 @@
 import { React, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ajouterProduit, modifierProduit, supprimerProduit } from "../redux/reducers/produitsReducer";
 // Composant qui gère l'affichage et les opération CRUD des produits
 function ProduitsListe() {
 
-    // Récurépation des produits depuis Redux
-    const produits = useSelector((state) => state.produits.produits);
     const dispatch = useDispatch();
+    // Récupération des produits depuis Redux
+    const produits = useSelector((state) => state.produits.produits);
+    
 
     // initialisation des attributs
     const [nom, setNom] = useState('');
@@ -25,25 +26,18 @@ function ProduitsListe() {
           .then((res) => res.json())
           .then((data) => {
             data.forEach((produit) => {
-              dispatch(ajoutProduit(produit));
+              dispatch(ajouterProduit(produit));
             });
           })
           .catch((err) => console.error("Erreur dans la récupération des données", err));
       }, [dispatch]);
 
     // Fonction d'ajout des produits
-    const ajoutProduit = (event) => {
+    const handleAjouterProduit = (event) => {
         // fonctionnalité js 
         event.preventDefault();
 
-        const nouveauProduit = {
-            // les attributs de l'entité
-            nom,
-            description,
-            prix, 
-            // (id du produit reprenant la relation les liant )
-            categorie_relation_id: categorieId,
-        };
+        const nouveauProduit = { nom, description, prix, categorie_relation_id: categorieId };
 
         // Envoie de la requête API pour ajouter avec Redux
         fetch('http://127.0.0.1:8000/api/produits',{
@@ -55,7 +49,7 @@ function ProduitsListe() {
         })
         .then((res) => res.json())
         .then((data) => {
-          dispatch(ajoutProduit(data));
+          dispatch(ajouterProduit(data));
           setNom("");
           setDescription("");
           setPrix(0);
@@ -66,7 +60,7 @@ function ProduitsListe() {
 
     // Fonction de modification de produit
 
-    const modifierProduit = (event) => {
+    const handleModifierProduit = (event) => {
         event.preventDefault();
 
         fetch(`http://127.0.0.1:8000/api/produits/${produitEnCours.id}`, {
@@ -84,7 +78,7 @@ function ProduitsListe() {
 
 
     // Fonction de suppression d'un produit (DELETE)
-    const supprimerProduit = (id) => {
+    const handleSupprimerProduit = (id) => {
         fetch(`http://127.0.0.1:8000/api/produits/${id}`, {
             method: 'DELETE',
         })
@@ -101,7 +95,7 @@ function ProduitsListe() {
         return (
             <div>
                 <h1>Liste des Produits</h1>
-                <form onSubmit={ajoutProduit}>
+                <form onSubmit={handleAjouterProduit}>
                 <div>
                     <label>Nom</label>
                     <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} required/>
@@ -159,7 +153,7 @@ function ProduitsListe() {
                         <td>{produit.prix}</td>
                         <td>
                         <button onClick={() => setProduitEnCours(produit)}>Modifier</button>
-                            <button onClick={() => supprimerProduit(produit.id)}>Supprimer</button>
+                            <button onClick={() => handleSupprimerProduit(produit.id)}>Supprimer</button>
                         </td>
                       </tr>
                     ))}
@@ -167,7 +161,7 @@ function ProduitsListe() {
                 </table>
 
                   {produitEnCours && (
-                    <form onSubmit={modifierProduit}>
+                    <form onSubmit={handleModifierProduit}>
                         <h2>Modifier le produit</h2>
                         {/* Champ pour modifier le nom du produit  */}
                         <input type="text" value={produitEnCours.nom} onChange={(e) => setProduitEnCours({ ...produitEnCours, nom: e.target.value })} placeholder="Nom"/>
