@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ajouterCategorie, modifierCategorie, supprimerCategorie } from "../redux/reducers/categoriesReducer";
 
 function CategoriesListe() {
+    
     const dispatch = useDispatch();
-
     // useSelector pour récupérer les catégories depuis l'état global de Redux (pas useState)
     const categories = useSelector((state) => state.categories.categories);
 

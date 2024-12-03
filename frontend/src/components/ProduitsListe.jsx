@@ -1,9 +1,12 @@
 import { React, useEffect, useState } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { ajouterProduit, modifierProduit, supprimerProduit } from "../redux/reducers/produitsReducer";
 // Composant qui gère l'affichage et les opération CRUD des produits
 function ProduitsListe() {
-    // initialisation de l'état (tableau produit)
-    const [produits, setProduits] = useState([]);
+
+    // Récurépation des produits depuis Redux
+    const produits = useSelector((state) => state.produits.produits);
+    const dispatch = useDispatch();
 
     // initialisation des attributs
     const [nom, setNom] = useState('');
@@ -11,7 +14,6 @@ function ProduitsListe() {
     // float et ca commence à 0
     const [prix, setPrix] = useState(0);
     const [categorieId, setCategorieId] = useState('');
-
     // état pour la modification (PUT)
     const [produitEnCours, setProduitEnCours] = useState(null);
 
@@ -19,11 +21,15 @@ function ProduitsListe() {
     // Au chargement de la page on va charger les produits (GET)
     useEffect(() => {
         // Fetch produits
-        fetch('http://127.0.0.1:8000/api/produits')
+        fetch("http://127.0.0.1:8000/api/produits")
           .then((res) => res.json())
-          .then((data) => setProduits(data))
-          .catch((err) => console.error('Erreur dans la récupération des données', err));
-    }, []);
+          .then((data) => {
+            data.forEach((produit) => {
+              dispatch(ajoutProduit(produit));
+            });
+          })
+          .catch((err) => console.error("Erreur dans la récupération des données", err));
+      }, [dispatch]);
 
     // Fonction d'ajout des produits
     const ajoutProduit = (event) => {
@@ -35,10 +41,11 @@ function ProduitsListe() {
             nom,
             description,
             prix, 
+            // (id du produit reprenant la relation les liant )
             categorie_relation_id: categorieId,
         };
 
-    // Envoie de la requête API pour ajouter
+        // Envoie de la requête API pour ajouter avec Redux
         fetch('http://127.0.0.1:8000/api/produits',{
             method: 'POST',
             headers: {
@@ -48,45 +55,31 @@ function ProduitsListe() {
         })
         .then((res) => res.json())
         .then((data) => {
-            // appel du setteur pour ajouter le nouveau produit
-            // méthode .. React
-            setProduits((prevProduits) => [...prevProduits, data]);
-            setNom('');
-            setDescription('');
-            setPrix();
-            setCategorieId('');
+          dispatch(ajoutProduit(data));
+          setNom("");
+          setDescription("");
+          setPrix(0);
+          setCategorieId("");
         })
         .catch((err) => console.error(err));
     };
 
     // Fonction de modification de produit
-    const modifierClick = (produit) => {
-        setProduitEnCours(produit);
-      };
 
-    const modifierProduit = (e) => {
-        e.preventDefault();
+    const modifierProduit = (event) => {
+        event.preventDefault();
 
         fetch(`http://127.0.0.1:8000/api/produits/${produitEnCours.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(produitEnCours),
           })
-            .then((res) => {
-              if (res.ok) {
-                return res.json();
-              } else {
-                throw new Error("Erreur lors de la mise à jour.");
-              }
-            })
+            .then((res) => res.json())
             .then((data) => {
-              // Mettre à jour la liste des produits
-              setProduits((prevProduits) =>
-                prevProduits.map((p) => (p.id === data.id ? data : p))
-              );
-              setProduitEnCours(null); // Réinitialiser le formulaire
-            })
-            .catch((err) => console.error(err));
+              dispatch(modifierProduit(data));
+              setProduitEnCours(null);
+          })
+          .catch((err) => console.error(err));
     }
 
 
@@ -96,12 +89,11 @@ function ProduitsListe() {
             method: 'DELETE',
         })
         .then((res) => {
-            if (res.ok) {
-                // Si la suppression est réussie, la liste est màj
-                setProduits((prevProduits) => prevProduits.filter((produit) => produit.id !== id));
-            } else {
-                throw new Error('Erreur lors de la suppression.');
-            }
+          if (res.ok) {
+            dispatch(supprimerProduit(id));
+          } else {
+            throw new Error("Erreur lors de la suppression.");
+          }
         })
         .catch((err) => console.error(err));
     };
@@ -155,7 +147,7 @@ function ProduitsListe() {
                       <th>Nom</th>
                       <th>Description</th>
                       <th>Prix</th>
-                      <th>Catégorie</th>
+                      {/* <th>Catégorie</th> */}
                       <th>Modifier/Supprimer</th>
                     </tr>
                   </thead>
@@ -166,7 +158,7 @@ function ProduitsListe() {
                         <td>{produit.description}</td>
                         <td>{produit.prix}</td>
                         <td>
-                            <button onClick={() => modifierClick(produit)}>Modifier</button>
+                        <button onClick={() => setProduitEnCours(produit)}>Modifier</button>
                             <button onClick={() => supprimerProduit(produit.id)}>Supprimer</button>
                         </td>
                       </tr>
@@ -174,7 +166,7 @@ function ProduitsListe() {
                   </tbody>
                 </table>
 
-                {produitEnCours && (
+                  {produitEnCours && (
                     <form onSubmit={modifierProduit}>
                         <h2>Modifier le produit</h2>
                         {/* Champ pour modifier le nom du produit  */}
@@ -183,12 +175,10 @@ function ProduitsListe() {
                         <input type="number" value={produitEnCours.prix} onChange={(e) => setProduitEnCours({ ...produitEnCours, prix: parseFloat(e.target.value),})}placeholder="Prix"/>
                         <button type="submit">Modifier</button>
                         <button onClick={() => setProduitEnCours(null)}>Annuler</button>
-
                     </form>
-                )}
+                  )}
             </div>
-          );
-
-    }
+        );
+}
 
 export default ProduitsListe;
