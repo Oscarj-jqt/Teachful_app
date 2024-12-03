@@ -110,6 +110,8 @@ Ajouter quelques fonctionnalités bonus (recherche? tri?)
 
 Commencement du niveau 3
 On va intégrer l'authentification JWT côté backend
+
+Fin de la partie sur l'authentification JWT. Des bugs persistent lors du test Postman malgré tout.
 En front, on va ajouter barre de recherche et le tri
 Et enfin déploiement avec Vercel pour le front
 
