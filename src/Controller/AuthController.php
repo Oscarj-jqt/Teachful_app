@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController
 {
     // Première route correspondant à la connexion pour avoir un token JWT
+    // Mise en place test Postman
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function login(): Response
     {
