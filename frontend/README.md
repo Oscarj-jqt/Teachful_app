@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# Teachful
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+Ce projet simule une plateforme de gestion de produits et catégories, avec une API backend en Symfony et un frontend en React. Le but était de créer une interface utilisateur interactive permettant de gérer des produits et des catégories, avec des fonctionnalités comme l'ajout de produits, la gestion des relations entre catégories et produits, la validation des données, et l'authentification via JWT. Une démo fonctionnelle est hébergée sur **Vercel**.
 
-In the project directory, you can run:
 
-### `npm start`
+## Description des Choix Techniques
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Backend - Symfony
+- **Symfony** a été choisi pour sa robustesse dans la gestion d'APIs et la manipulation de bases de données. Il est bien adapté pour créer des services web sécurisés avec des validations complexes.
+- **JWT** (JSON Web Tokens) est utilisé pour l'authentification des utilisateurs. Ce système permet d'assurer une communication sécurisée entre le frontend et le backend.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend - React
+- **React** a été choisi pour son dynamisme dans la création de composants réutilisables et son intégration facile avec des APIs REST.
+- **TailwindCSS** est utilisé pour une gestion rapide et efficace du design responsive.
+- **Redux** est utilisé pour la gestion de l'état global de l'application, en particulier pour gérer les produits et les catégories.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Prérequis
 
-### `npm run build`
+Il faudra installer :
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **PHP** 8.1 ou supérieur
+- **Composer** pour les dépendances PHP
+- **Node.js** 16.x ou supérieur
+- **npm** ou **yarn** pour les dépendances JavaScript
+- **Base de données** (MySQL ou PostgreSQL)
+- **JWT** pour l'authentification sécurisée
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Instructions pour l'installation
 
-### `npm run eject`
+ **Cloner le projet** :
+```bash
+git clone https://github.com/Oscarj-jqt/Teachful_app
+cd Teachful_app
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Installer les dépendances du backend**
+```bash
+composer install
+```
+**Configurer la base de données dans le fichier .env**
+```bash
+DATABASE_URL="mysql://root:password@127.0.0.1:3306/nom_de_la_base?serverVersion=5.7"
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Créer la base de données et appliquer les migrations**
+```bash
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Configurer l'authentification JWT**
+```bash
+composer require lexik/jwt-authentication-bundle
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Lancer le serveur Symfony**
+```bash
+symfony serve -d
+```
 
-## Learn More
+**Partie Frontend**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+cd frontend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Installer les dépendances**
+```bash
+npm install
+```
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Lancer l'application React**
+```bash
+npm start
+```
