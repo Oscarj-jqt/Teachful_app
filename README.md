@@ -76,5 +76,5 @@ npm start
 ```
 
 
-L'application React est hébergé ici :
+Consulter la vue de l'application :
 https://teachful-app.vercel.app
