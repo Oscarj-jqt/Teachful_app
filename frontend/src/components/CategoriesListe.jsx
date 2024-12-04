@@ -9,8 +9,6 @@ function CategoriesListe() {
     const dispatch = useDispatch();
     // useSelector pour récupérer les catégories depuis l'état global de Redux (pas useState)
     const categories = useSelector((state) => state.categories.categories);
-    // Récupérer l'erreur du Redux store
-    const erreur = useSelector((state) => state.categories.erreur);
     // état pour les attributs
     const [nom, setNom] = useState("");
     // État pour la catégorie en cours de modification

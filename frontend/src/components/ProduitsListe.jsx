@@ -8,7 +8,6 @@ function ProduitsListe() {
     const dispatch = useDispatch();
     // Récupération des produits depuis Redux
     const produits = useSelector((state) => state.produits.produits);
-    const erreur = useSelector((state) => state.produits.erreur);
 
     // initialisation des attributs
     const [nom, setNom] = useState('');
