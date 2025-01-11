@@ -1,7 +1,7 @@
 # Teachful
 
 
-Ce projet simule une plateforme de gestion de produits et catégories, avec une API backend en Symfony et un frontend en React. Le but était de créer une interface utilisateur interactive permettant de gérer des produits et des catégories, avec des fonctionnalités comme l'ajout de produits, la gestion des relations entre catégories et produits, la validation des données, et l'authentification via JWT. Une démo fonctionnelle est hébergée sur **Vercel**.
+Il s'agit d'une application web de gestion de produits et catégories, avec une API backend en Symfony et un frontend en React. Le but était de créer une interface utilisateur interactive permettant de gérer des produits et des catégories, avec des fonctionnalités comme l'ajout de produits, la gestion des relations entre catégories et produits, la validation des données, et l'authentification via JWT.
 
 
 ## Description des Choix Techniques
