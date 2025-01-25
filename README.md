@@ -9,7 +9,7 @@ Il s'agit d'une application web de gestion de produits et catégories, avec une 
 ### Backend - Symfony
 - **Symfony** a été choisi pour sa robustesse dans la gestion d'APIs et la manipulation de bases de données. Il est bien adapté pour créer des services web sécurisés avec des validations complexes.
 - **JWT** (JSON Web Tokens) est utilisé pour l'authentification des utilisateurs. Ce système permet d'assurer une communication sécurisée entre le frontend et le backend.
-
+- **SQL** pour le stockage des données
 ### Frontend - React
 - **React** a été choisi pour son dynamisme dans la création de composants réutilisables et son intégration facile avec des APIs REST.
 - **TailwindCSS** est utilisé pour une gestion rapide et efficace du design responsive.
